@@ -32,7 +32,7 @@ import butterknife.OnClick;
  * Created by xsf
  * on 2016.09.16:45
  */
-public class NewsMainFragment extends BaseFragment<NewsMainPresenter,NewsMainModel>implements NewsMainContract.View {
+public class NewsMainFragment extends BaseFragment<NewsMainPresenter, NewsMainModel> implements NewsMainContract.View {
 
 
     @Bind(R.id.toolbar)
@@ -54,12 +54,13 @@ public class NewsMainFragment extends BaseFragment<NewsMainPresenter,NewsMainMod
 
     @Override
     public void initPresenter() {
-      mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
     public void initView() {
         mPresenter.lodeMineChannelsRequest();
+        //点击按钮，返回至顶部
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,25 +68,27 @@ public class NewsMainFragment extends BaseFragment<NewsMainPresenter,NewsMainMod
             }
         });
     }
+
     @OnClick(R.id.add_channel_iv)
-    public void clickAdd(){
-        NewsChannelActivity.startAction(getContext());
+    public void clickAdd() {
+        NewsChannelActivity.startAction(getContext());//跳转到频道管理
     }
 
+    //通过频道列表，生成子Fragment，建立Adapter，与viewpage建立联系
     @Override
     public void returnMineNewsChannels(List<NewsChannelTable> newsChannelsMine) {
-        if(newsChannelsMine!=null) {
+        if (newsChannelsMine != null) {
             List<String> channelNames = new ArrayList<>();
             List<Fragment> mNewsFragmentList = new ArrayList<>();
             for (int i = 0; i < newsChannelsMine.size(); i++) {
                 channelNames.add(newsChannelsMine.get(i).getNewsChannelName());
                 mNewsFragmentList.add(createListFragments(newsChannelsMine.get(i)));
             }
-            if(fragmentAdapter==null) {
+            if (fragmentAdapter == null) {
                 fragmentAdapter = new BaseFragmentAdapter(getChildFragmentManager(), mNewsFragmentList, channelNames);
-            }else{
+            } else {
                 //刷新fragment
-                fragmentAdapter.setFragments(getChildFragmentManager(),mNewsFragmentList,channelNames);
+                fragmentAdapter.setFragments(getChildFragmentManager(), mNewsFragmentList, channelNames);
             }
             viewPager.setAdapter(fragmentAdapter);
             tabs.setupWithViewPager(viewPager);

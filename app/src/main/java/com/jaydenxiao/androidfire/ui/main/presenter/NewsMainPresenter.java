@@ -33,6 +33,7 @@ public class NewsMainPresenter extends NewsMainContract.Presenter{
 
     @Override
     public void lodeMineChannelsRequest() {
+        //通过Model获取newsChannelTables，即获取频道列表
         mRxManage.add(mModel.lodeMineNewsChannels().subscribe(new RxSubscriber<List<NewsChannelTable>>(mContext,false) {
             @Override
             protected void _onNext(List<NewsChannelTable> newsChannelTables) {

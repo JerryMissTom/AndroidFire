@@ -36,7 +36,9 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        SetTranslanteBar();
+        SetTranslanteBar();//设置透明状态栏，全屏模式
+
+        //如下是设置动画效果，图片和字母从小变大，由透明变不透明，并且监听动画状态
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.3f, 1f);
         PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat("scaleX", 0.3f, 1f);
         PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat("scaleY", 0.3f, 1f);
@@ -44,9 +46,9 @@ public class SplashActivity extends BaseActivity {
         ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(ivLogo, alpha, scaleX, scaleY);
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(objectAnimator1, objectAnimator2);
+        animatorSet.playTogether(objectAnimator1, objectAnimator2);//动画一起执行
         animatorSet.setInterpolator(new AccelerateInterpolator());
-        animatorSet.setDuration(2000);
+        animatorSet.setDuration(2000);//动画2秒
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
@@ -54,7 +56,7 @@ public class SplashActivity extends BaseActivity {
             }
 
             @Override
-            public void onAnimationEnd(Animator animator) {
+            public void onAnimationEnd(Animator animator) {//动画结束后调到主界面
                 MainActivity.startAction(SplashActivity.this);
                 finish();
             }

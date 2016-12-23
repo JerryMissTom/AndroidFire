@@ -7,7 +7,7 @@ import com.yuyh.library.imgsel.utils.FileUtils;
 
 import java.io.Serializable;
 
-/**
+/** 图片选择器的中图片及文字的参数设置
  * @author yuyh.
  * @date 2016/8/5.
  */

@@ -51,7 +51,7 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
         activity.startActivityForResult(intent, RequestCode);
     }
 
-    public static void startActivity(Fragment fragment, ImgSelConfig config, int RequestCode){
+    public static void startActivity(Fragment fragment, ImgSelConfig config, int RequestCode) {
         Intent intent = new Intent(fragment.getActivity(), ImgSelActivity.class);
         Constant.config = config;
         fragment.startActivityForResult(intent, RequestCode);
@@ -62,8 +62,9 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_img_sel);
         Constant.imageList.clear();
-        config = Constant.config;
+        config = Constant.config;//从其他页面跳转过来提供的参数
 
+        //判断是否有写外部存储的权限，若没有，申请
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             //申请权限
@@ -76,11 +77,14 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
         }
 
         initView();
+
+        //判断SD卡是否可以用
         if (!FileUtils.isSdCardAvailable()) {
             Toast.makeText(this, "SD卡不可用", Toast.LENGTH_SHORT).show();
         }
     }
 
+    //初始化组件并设置参数
     private void initView() {
         rlTitleBar = (RelativeLayout) findViewById(R.id.rlTitleBar);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
@@ -114,6 +118,7 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnConfirm) {
+            //
             if (Constant.imageList != null && !Constant.imageList.isEmpty()) {
                 exit();
             }
@@ -132,6 +137,7 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
         }
     }
 
+    //选中或者未选中图片时，确定按钮文字的变化
     @Override
     public void onImageSelected(String path) {
         btnConfirm.setText("确定(" + Constant.imageList.size() + "/" + config.maxNum + ")");
@@ -180,6 +186,7 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    //返回给上一界面选中图片路径的List<String>
     public void exit() {
         Intent intent = new Intent();
         result.clear();
@@ -193,17 +200,21 @@ public class ImgSelActivity extends FragmentActivity implements View.OnClickList
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case STORAGE_REQUEST_CODE:
-                if(grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //请求参数成功后，加载图片展示的Fragment
+                if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.fmImageList, ImgSelFragment.instance(config), null)
                             .commitAllowingStateLoss();
+                    //假使在Activity的状态保存之后，尝试去提交一个FragmentTransaction，则会跑出异常，使用commitAllowingStateLoss可以忽略此异常
+                    //相关的可以参考http://blog.jobbole.com/66117/
                 } else {
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 }

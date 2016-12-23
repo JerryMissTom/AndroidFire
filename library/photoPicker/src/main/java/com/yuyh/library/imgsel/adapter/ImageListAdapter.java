@@ -50,6 +50,7 @@ public class ImageListAdapter extends EasyRVAdapter<Image> {
             }
         });
 
+        //允许拍照，第一个位置是拍照图片
         if (position == 0 && showCamera) {
             ImageView iv = viewHolder.getView(R.id.ivTakePhoto);
             iv.setImageResource(R.drawable.ic_take_photo);
@@ -57,9 +58,12 @@ public class ImageListAdapter extends EasyRVAdapter<Image> {
         }
 
         final ImageView iv = viewHolder.getView(R.id.ivImage);
-        final FrameLayout frameLayout=viewHolder.getView(R.id.pi_picture_choose_item_select);
+        final FrameLayout frameLayout = viewHolder.getView(R.id.pi_picture_choose_item_select);
         config.loader.displayImage(context, item.path, iv);
 
+        //我们知道在oncreate中View.getWidth和View.getHeight无法获得一个view的高度和宽度，这是因为View组件布局要在onResume回调后完成。
+        //所以现在需要使用getViewTreeObserver().addOnGlobalLayoutListener()来获得宽度或者高度。这是获得一个view的宽度和高度的方法之一。
+        //具体见http://blog.csdn.net/linghu_java/article/details/46544811
         iv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -68,7 +72,7 @@ public class ImageListAdapter extends EasyRVAdapter<Image> {
                 } else {
                     iv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-
+                //设置图片为正方形
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) iv.getLayoutParams();
                 params.height = params.width;
                 iv.setLayoutParams(params);
@@ -76,24 +80,27 @@ public class ImageListAdapter extends EasyRVAdapter<Image> {
             }
         });
 
+        //多选情况下，点击确定选中图标切换
         if (mutiSelect) {
             viewHolder.setVisible(R.id.ivPhotoCheaked, true);
             if (selectedImageList.contains(item)) {
                 viewHolder.setImageResource(R.id.ivPhotoCheaked, R.drawable.ic_checked);
-                viewHolder.setVisible(R.id.pi_picture_choose_item_select,View.VISIBLE);
+                viewHolder.setVisible(R.id.pi_picture_choose_item_select, View.VISIBLE);
             } else {
                 viewHolder.setImageResource(R.id.ivPhotoCheaked, R.drawable.ic_uncheck);
-                viewHolder.setVisible(R.id.pi_picture_choose_item_select,View.GONE);
+                viewHolder.setVisible(R.id.pi_picture_choose_item_select, View.GONE);
             }
         } else {
             viewHolder.setVisible(R.id.ivPhotoCheaked, false);
         }
     }
 
+    //设置是否可以拍照
     public void setShowCamera(boolean showCamera) {
         this.showCamera = showCamera;
     }
 
+    //设置是否可以多选
     public void setMutiSelect(boolean mutiSelect) {
         this.mutiSelect = mutiSelect;
     }
@@ -111,12 +118,12 @@ public class ImageListAdapter extends EasyRVAdapter<Image> {
     }
 
 
-    public void select(Image image,int position) {
+    public void select(Image image, int position) {
         if (selectedImageList.contains(image)) {
             selectedImageList.remove(image);
         } else {
             selectedImageList.add(image);
         }
-        notifyItemChanged(position);
+        notifyItemChanged(position); //选取后刷新此位置的ViewHolder
     }
 }

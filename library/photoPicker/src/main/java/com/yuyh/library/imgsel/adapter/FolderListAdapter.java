@@ -57,6 +57,7 @@ public class FolderListAdapter extends EasyLVAdapter<Folder> {
             holder.setVisible(R.id.indicator, false);
         }
 
+        //点击进入目录，显示本目录下的所有图片，通过回调在Fragment中显示
         holder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +74,7 @@ public class FolderListAdapter extends EasyLVAdapter<Folder> {
         notifyDataSetChanged();
     }
 
+    //获取所有图片的数目
     private int getTotalImageSize() {
         int result = 0;
         if (folderList != null && folderList.size() > 0) {

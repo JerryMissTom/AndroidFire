@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 
-/**
+/**与本地文件操作相关的一些方法
  * @author yuyh.
  * @date 16/4/9.
  */

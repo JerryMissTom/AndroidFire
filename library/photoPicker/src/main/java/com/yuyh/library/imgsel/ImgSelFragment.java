@@ -92,8 +92,11 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener {
 
         }
 
+        //RecyclerView设置共三列
         rvImageList.setLayoutManager(new GridLayoutManager(rvImageList.getContext(), 3));
+        //添加分割线
         rvImageList.addItemDecoration(new DividerGridItemDecoration(rvImageList.getContext()));
+        //是否提供拍照选择项
         if (config.needCamera)
             imageList.add(new Image());
 
@@ -104,18 +107,19 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener {
         imageListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClick(int position, Image image) {
+                //假如允许拍照，点击第一个显示拍照界面
                 if (config.needCamera && position == 0) {
                     showCameraAction();
                 } else {
                     if (image != null) {
-                        if (config.multiSelect) {
+                        if (config.multiSelect) {//允许多选图片
                             if (Constant.imageList.contains(image.path)) {
                                 Constant.imageList.remove(image.path);
                                 if (callback != null) {
                                     callback.onImageUnselected(image.path);
                                 }
                             } else {
-                                if (config.maxNum <= Constant.imageList.size()) {
+                                if (config.maxNum <= Constant.imageList.size()) {//选择多于9个则会提示
                                     Toast.makeText(getActivity(), "最多选择" + config.maxNum + "张图片", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
@@ -138,6 +142,7 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener {
 
         folderListAdapter = new FolderListAdapter(getActivity(), folderList, config);
 
+        //使用Loader加载图片和路径数据
         getActivity().getSupportLoaderManager().initLoader(LOADER_ALL, null, mLoaderCallback);
     }
 
@@ -255,6 +260,7 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        //弹出图片路径的List
         if (v.getId() == btnAlbumSelected.getId()) {
             if (folderPopupWindow == null) {
                 WindowManager wm = getActivity().getWindowManager();
@@ -273,11 +279,14 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    //显示照相机界面
     private void showCameraAction() {
+        //多于9个显示无法打开
         if (config.maxNum <= Constant.imageList.size()) {
             Toast.makeText(getActivity(), "最多选择" + config.maxNum + "张图片", Toast.LENGTH_SHORT).show();
             return;
         }
+        //拍照并存储临时图片，返回码是REQUEST_CAMERA
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             tempFile = new File(FileUtils.createRootPath(getActivity()) + "/" + System.currentTimeMillis() + ".jpg");
@@ -290,6 +299,7 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    //拍照成功后返回RESULT_OK，并且回调展示图片
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA) {

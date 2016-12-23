@@ -8,6 +8,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
+//沉浸式状态栏的适配工具类，可以参考：http://jaeger.itscoder.com/android/2016/03/27/statusbar-util.html
 public class StatusBarCompat {
     private static final int INVALID_VAL = -1;
     private static final int COLOR_DEFAULT = Color.parseColor("#20000000");
@@ -15,6 +16,7 @@ public class StatusBarCompat {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void compat(Activity activity, int statusColor) {
 
+        //当前手机版本为5.0及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (statusColor != INVALID_VAL) {
                 activity.getWindow().setStatusBarColor(statusColor);
@@ -22,6 +24,7 @@ public class StatusBarCompat {
             return;
         }
 
+        //当前手机版本为4.4
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int color = COLOR_DEFAULT;
             ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
