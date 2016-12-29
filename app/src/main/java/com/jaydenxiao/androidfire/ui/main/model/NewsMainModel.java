@@ -26,12 +26,14 @@ public class NewsMainModel implements NewsMainContract.Model {
         return Observable.create(new Observable.OnSubscribe<List<NewsChannelTable>>() {
             @Override
             public void call(Subscriber<? super List<NewsChannelTable>> subscriber) {
+                //从缓存获取频道列表
                 ArrayList<NewsChannelTable> newsChannelTableList = (ArrayList<NewsChannelTable>) ACache.get(AppApplication.getAppContext()).getAsObject(AppConstant.CHANNEL_MINE);
-               if(newsChannelTableList==null){
-                   newsChannelTableList= (ArrayList<NewsChannelTable>) NewsChannelTableManager.loadNewsChannelsStatic();
-                   ACache.get(AppApplication.getAppContext()).put(AppConstant.CHANNEL_MINE,newsChannelTableList);
-               }
-                subscriber.onNext(newsChannelTableList);
+                //缓存不存在频道列表的话，则获取固定的频道列表，并加入缓存
+                if (newsChannelTableList == null) {
+                    newsChannelTableList = (ArrayList<NewsChannelTable>) NewsChannelTableManager.loadNewsChannelsStatic();
+                    ACache.get(AppApplication.getAppContext()).put(AppConstant.CHANNEL_MINE, newsChannelTableList);
+                }
+                subscriber.onNext(newsChannelTableList);//最后在NewsMainPresenter中处理
                 subscriber.onCompleted();
             }
         }).compose(RxSchedulers.<List<NewsChannelTable>>io_main());

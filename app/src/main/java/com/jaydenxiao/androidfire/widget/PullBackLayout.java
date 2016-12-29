@@ -28,9 +28,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
+//实现下拉功能的容器控件，可以使用ViewDragHelper来控制滑动的行为，具体可以见http://blog.csdn.net/lmj623565791/article/details/46858663
 public class PullBackLayout extends FrameLayout {
 
-    private final ViewDragHelper dragger; // http://blog.csdn.net/lmj623565791/article/details/46858663
+    private final ViewDragHelper dragger;
 
     private final int minimumFlingVelocity;
 

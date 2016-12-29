@@ -32,7 +32,7 @@ import butterknife.Bind;
  * Created by xsf
  * on 2016.09.11:49
  */
-public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosListModel> implements PhotoListContract.View ,OnRefreshListener,OnLoadMoreListener{
+public class PhotosMainFragment extends BaseFragment<PhotosListPresenter, PhotosListModel> implements PhotoListContract.View, OnRefreshListener, OnLoadMoreListener {
     @Bind(R.id.ntb)
     NormalTitleBar ntb;
     @Bind(R.id.irc)
@@ -41,7 +41,7 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
     LoadingTip loadedTip;
     @Bind(R.id.fab)
     FloatingActionButton fab;
-    private CommonRecycleViewAdapter<PhotoGirl>adapter;
+    private CommonRecycleViewAdapter<PhotoGirl> adapter;
     private static int SIZE = 20;
     private int mStartPage = 1;
 
@@ -52,28 +52,28 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
 
     @Override
     public void initPresenter() {
-        mPresenter.setVM(this,mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
     public void initView() {
         ntb.setTvLeftVisiable(false);
         ntb.setTitleText(getString(R.string.girl_title));
-        adapter=new CommonRecycleViewAdapter<PhotoGirl>(getContext(),R.layout.item_photo) {
+        adapter = new CommonRecycleViewAdapter<PhotoGirl>(getContext(), R.layout.item_photo) {
             @Override
-            public void convert(ViewHolderHelper helper,final PhotoGirl photoGirl) {
-                ImageView imageView=helper.getView(R.id.iv_photo);
+            public void convert(ViewHolderHelper helper, final PhotoGirl photoGirl) {
+                ImageView imageView = helper.getView(R.id.iv_photo);
                 Glide.with(mContext).load(photoGirl.getUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .placeholder(com.jaydenxiao.common.R.drawable.ic_image_loading)
                         .error(com.jaydenxiao.common.R.drawable.ic_empty_picture)
-                        .centerCrop().override(1090, 1090*3/4)
+                        .centerCrop().override(1090, 1090 * 3 / 4)
                         .crossFade().into(imageView);
 
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        PhotosDetailActivity.startAction(mContext,photoGirl.getUrl());
+                        PhotosDetailActivity.startAction(mContext, photoGirl.getUrl());
                     }
                 });
             }
@@ -82,6 +82,7 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
         irc.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         irc.setOnLoadMoreListener(this);
         irc.setOnRefreshListener(this);
+        //点击返回顶部
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,8 +95,8 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
     @Override
     public void returnPhotosListData(List<PhotoGirl> photoGirls) {
         if (photoGirls != null) {
-            mStartPage +=1;
-            if (adapter.getPageBean().isRefresh()) {
+            mStartPage += 1;
+            if (adapter.getPageBean().isRefresh()) {  //下拉刷新，则替换所有的数据，向上加载更多，则添加新数据
                 irc.setRefreshing(false);
                 adapter.replaceAll(photoGirls);
             } else {
@@ -111,8 +112,8 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
 
     @Override
     public void showLoading(String title) {
-        if(adapter.getPageBean().isRefresh())
-        loadedTip.setLoadingTip(LoadingTip.LoadStatus.loading);
+        if (adapter.getPageBean().isRefresh())
+            loadedTip.setLoadingTip(LoadingTip.LoadStatus.loading);
     }
 
     @Override
@@ -122,11 +123,11 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
 
     @Override
     public void showErrorTip(String msg) {
-        if( adapter.getPageBean().isRefresh()) {
+        if (adapter.getPageBean().isRefresh()) {
             loadedTip.setLoadingTip(LoadingTip.LoadStatus.error);
             loadedTip.setTips(msg);
             irc.setRefreshing(false);
-        }else{
+        } else {
             irc.setLoadMoreStatus(LoadMoreFooterView.Status.ERROR);
         }
     }
@@ -135,14 +136,15 @@ public class PhotosMainFragment extends BaseFragment<PhotosListPresenter,PhotosL
     public void onRefresh() {
         adapter.getPageBean().setRefresh(true);
         mStartPage = 0;
-        //发起请求
+        //下拉刷新发起请求
         irc.setRefreshing(true);
         mPresenter.getPhotosListDataRequest(SIZE, mStartPage);
     }
+
     @Override
     public void onLoadMore(View loadMoreView) {
         adapter.getPageBean().setRefresh(false);
-        //发起请求
+        //上滑加载更多发起请求
         irc.setLoadMoreStatus(LoadMoreFooterView.Status.LOADING);
         mPresenter.getPhotosListDataRequest(SIZE, mStartPage);
     }

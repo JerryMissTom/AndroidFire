@@ -49,6 +49,7 @@ public class PhotoDetailFragment extends BaseFragment {
 
     }
 
+    //异步加载图片
     private void initPhotoView() {
         mRxManager.add(Observable.timer(100, TimeUnit.MILLISECONDS) // 直接使用glide加载的话，activity切换动画时背景短暂为默认背景色
                 .compose(RxSchedulers.<Long>io_main())
@@ -65,16 +66,17 @@ public class PhotoDetailFragment extends BaseFragment {
 
                     @Override
                     public void onNext(Long aLong) {
-                        ImageLoaderUtils.displayBigPhoto(getContext(),photoView,mImgSrc);
+                        ImageLoaderUtils.displayBigPhoto(getContext(), photoView, mImgSrc);
                     }
                 }));
     }
 
+    //发送图片点击事件，最终在NewsPhotoDetailActivity中的onStart()监听处理
     private void setPhotoViewClickEvent() {
         photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float v, float v1) {
-                mRxManager.post(AppConstant.PHOTO_TAB_CLICK,"");
+                mRxManager.post(AppConstant.PHOTO_TAB_CLICK, "");
             }
         });
     }

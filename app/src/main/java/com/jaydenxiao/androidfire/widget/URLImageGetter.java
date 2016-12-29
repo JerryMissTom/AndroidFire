@@ -41,6 +41,8 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
+ * TextView异步加载含图片内容，通过判断从本地获取还是从网络获取
+ *
  * @author 咖枯
  * @version 1.0 2016/6/19
  */
@@ -93,7 +95,7 @@ public class URLImageGetter implements Html.ImageGetter {
     @NonNull
     private Drawable getDrawableFromNet(final String source) {
         mSubscription = Api.getDefault(HostType.NEWS_DETAIL_HTML_PHOTO)
-                .getNewsBodyHtmlPhoto(Api.getCacheControl(),source)
+                .getNewsBodyHtmlPhoto(Api.getCacheControl(), source)
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

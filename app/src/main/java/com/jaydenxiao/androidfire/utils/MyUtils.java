@@ -24,6 +24,8 @@ import android.view.ViewGroup;
 import com.jaydenxiao.androidfire.app.AppApplication;
 
 /**
+ * 设置TabLayout的Mode，获取屏幕宽度的工具类，若Tab的宽小于屏幕宽度，则设置为Fixed固定模式，反之为MODE_SCROLLABLE滑动模式
+ *
  * @author 咖枯
  * @version 1.0 2016/5/31
  */
@@ -39,6 +41,7 @@ public class MyUtils {
             tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
     }
+
     private static int calculateTabWidth(TabLayout tabLayout) {
         int tabWidth = 0;
         for (int i = 0; i < tabLayout.getChildCount(); i++) {
@@ -48,9 +51,11 @@ public class MyUtils {
         }
         return tabWidth;
     }
+
     public static int getScreenWith() {
         return AppApplication.getAppContext().getResources().getDisplayMetrics().widthPixels;
     }
+
     public static View getRootView(Activity context) {
         return ((ViewGroup) context.findViewById(android.R.id.content)).getChildAt(0);
     }

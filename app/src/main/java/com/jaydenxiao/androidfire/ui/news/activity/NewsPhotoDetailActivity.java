@@ -26,7 +26,7 @@ import butterknife.Bind;
 import rx.functions.Action1;
 
 /**
- * des:图文详情
+ * des:图片新闻详情
  * Created by xsf
  * on 2016.09.9:54
  */
@@ -48,7 +48,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
      * @param context
      * @param mNewsPhotoDetail
      */
-    public static void startAction(Context context,NewsPhotoDetail mNewsPhotoDetail) {
+    public static void startAction(Context context, NewsPhotoDetail mNewsPhotoDetail) {
         Intent intent = new Intent(context, NewsPhotoDetailActivity.class);
         intent.putExtra(AppConstant.PHOTO_DETAIL, mNewsPhotoDetail);
         context.startActivity(intent);
@@ -81,7 +81,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //监听图片tab点击
+        //监听图片tab点击，控制文字的隐藏和出现
         mRxManager.on(AppConstant.PHOTO_TAB_CLICK, new Action1<Object>() {
 
             @Override
@@ -147,7 +147,7 @@ public class NewsPhotoDetailActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                setPhotoDetailTitle(position);
+                setPhotoDetailTitle(position);//滑动更新图片相应的文字
             }
 
             @Override

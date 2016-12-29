@@ -76,14 +76,15 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
      * @param mContext
      * @param postId
      */
-    public static void startAction(Context mContext, View view,String postId, String imgUrl) {
+    public static void startAction(Context mContext, View view, String postId, String imgUrl) {
         Intent intent = new Intent(mContext, NewsDetailActivity.class);
         intent.putExtra(AppConstant.NEWS_POST_ID, postId);
         intent.putExtra(AppConstant.NEWS_IMG_RES, imgUrl);
 
+        //设置界面跳转动画
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation((Activity) mContext,view, AppConstant.TRANSITION_ANIMATION_NEWS_PHOTOS);
+                    .makeSceneTransitionAnimation((Activity) mContext, view, AppConstant.TRANSITION_ANIMATION_NEWS_PHOTOS);
             mContext.startActivity(intent, options.toBundle());
         } else {
 
@@ -107,9 +108,10 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
 
     @Override
     public void initView() {
-        SetTranslanteBar();
+        SetTranslanteBar();//设置沉浸式状态栏
         postId = getIntent().getStringExtra(AppConstant.NEWS_POST_ID);
         mPresenter.getOneNewsDataRequest(postId);
+        //点击左上角的箭头退出
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,15 +122,18 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
                 }
             }
         });
+        //右上角添加Menu
         toolbar.inflateMenu(R.menu.news_detail);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_web_view:
+                        //通过WebView打开新闻详情
                         NewsBrowserActivity.startAction(NewsDetailActivity.this, mShareLink, mNewsTitle);
                         break;
                     case R.id.action_browser:
+                        //通过自带的浏览器本身打开新闻详情
                         Intent intent = new Intent();
                         intent.setAction("android.intent.action.VIEW");
                         if (canBrowse(intent)) {
@@ -152,7 +157,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share));
                 intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_contents, mNewsTitle, mShareLink));
-                startActivity(Intent.createChooser(intent, getTitle()));
+                startActivity(Intent.createChooser(intent, getTitle()));//createChooser提供分享的标题
             }
         });
     }
@@ -173,12 +178,14 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
         setNewsDetailBodyTv(newsDetail, newsBody);
     }
 
+    //设置标题的颜色
     private void setToolBarLayout(String newsTitle) {
         toolbarLayout.setTitle(newsTitle);
         toolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
         toolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.primary_text_white));
     }
 
+    //加载头部的图片
     private void setNewsDetailPhotoIv(String imgSrc) {
         Glide.with(this).load(imgSrc)
                 .fitCenter()
@@ -186,6 +193,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
                 .crossFade().into(newsDetailPhotoIv);
     }
 
+    //异步加载处理新闻内容
     private void setNewsDetailBodyTv(final NewsDetail newsDetail, final String newsBody) {
         mRxManager.add(Observable.timer(500, TimeUnit.MILLISECONDS)
                 .compose(RxSchedulers.<Long>io_main())
@@ -208,6 +216,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
                 }));
     }
 
+    //加载新闻内容
     private void setBody(NewsDetail newsDetail, String newsBody) {
         int imgTotal = newsDetail.getImg().size();
         if (isShowBody(newsBody, imgTotal)) {
@@ -235,7 +244,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenter, NewsDe
     }
 
     private boolean canBrowse(Intent intent) {
-        return intent.resolveActivity(getPackageManager()) != null && mShareLink != null;
+        return intent.resolveActivity(getPackageManager()) != null && mShareLink != null;//查询是否有符合条件的activity
     }
 
     @Override

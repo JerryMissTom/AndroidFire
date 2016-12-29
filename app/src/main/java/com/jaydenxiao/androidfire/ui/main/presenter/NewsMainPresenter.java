@@ -14,17 +14,17 @@ import rx.functions.Action1;
  * Created by xsf
  * on 2016.09.17:43
  */
-public class NewsMainPresenter extends NewsMainContract.Presenter{
+public class NewsMainPresenter extends NewsMainContract.Presenter {
 
     @Override
     public void onStart() {
         super.onStart();
-        //监听新闻频道变化刷新
+        //监听新闻频道多少及顺序变化刷新
         mRxManage.on(AppConstant.NEWS_CHANNEL_CHANGED, new Action1<List<NewsChannelTable>>() {
 
             @Override
             public void call(List<NewsChannelTable> newsChannelTables) {
-                if(newsChannelTables!=null){
+                if (newsChannelTables != null) {
                     mView.returnMineNewsChannels(newsChannelTables);
                 }
             }
@@ -34,9 +34,10 @@ public class NewsMainPresenter extends NewsMainContract.Presenter{
     @Override
     public void lodeMineChannelsRequest() {
         //通过Model获取newsChannelTables，即获取频道列表
-        mRxManage.add(mModel.lodeMineNewsChannels().subscribe(new RxSubscriber<List<NewsChannelTable>>(mContext,false) {
+        mRxManage.add(mModel.lodeMineNewsChannels().subscribe(new RxSubscriber<List<NewsChannelTable>>(mContext, false) {
             @Override
             protected void _onNext(List<NewsChannelTable> newsChannelTables) {
+                //NewsMainFragment中展示获得数据
                 mView.returnMineNewsChannels(newsChannelTables);
             }
 

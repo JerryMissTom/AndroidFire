@@ -28,13 +28,14 @@ import java.util.List;
 public class VideosChannelTableManager {
 
     /**
-     * 加载视频类型
+     * 加载视频类型，固定不变，有热点，搞笑，娱乐，精品四个
+     *
      * @return
      */
     public static List<VideoChannelTable> loadVideosChannelsMine() {
         List<String> channelName = Arrays.asList(AppApplication.getAppContext().getResources().getStringArray(R.array.video_channel_name));
         List<String> channelId = Arrays.asList(AppApplication.getAppContext().getResources().getStringArray(R.array.video_channel_id));
-        ArrayList<VideoChannelTable>newsChannelTables=new ArrayList<>();
+        ArrayList<VideoChannelTable> newsChannelTables = new ArrayList<>();
         for (int i = 0; i < channelName.size(); i++) {
             VideoChannelTable entity = new VideoChannelTable(channelId.get(i), channelName.get(i));
             newsChannelTables.add(entity);

@@ -62,13 +62,13 @@ public class VideoMainFragment extends BaseFragment {
         fragmentAdapter = new BaseFragmentAdapter(getChildFragmentManager(), mNewsFragmentList, channelNames);
         viewPager.setAdapter(fragmentAdapter);
         tabs.setupWithViewPager(viewPager);
-        MyUtils.dynamicSetTabLayoutMode(tabs);
-        setPageChangeListener();
+        MyUtils.dynamicSetTabLayoutMode(tabs);//设置TabLayout的模式，是fixed还是滑动模式
+        setPageChangeListener();//滑动监听
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRxManager.post(AppConstant.NEWS_LIST_TO_TOP, "");
+                mRxManager.post(AppConstant.NEWS_LIST_TO_TOP, "");//在VideoListPresenter中响应
             }
         });
     }

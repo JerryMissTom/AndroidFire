@@ -47,9 +47,9 @@ public class PhotosDetailActivity extends AppCompatActivity implements PullBackL
     private ColorDrawable mBackground;
 
 
-    public static void startAction(Context context,String url){
+    public static void startAction(Context context, String url) {
         Intent intent = new Intent(context, PhotosDetailActivity.class);
-        intent.putExtra(AppConstant.PHOTO_DETAIL,url);
+        intent.putExtra(AppConstant.PHOTO_DETAIL, url);
         context.startActivity(intent);
     }
 
@@ -57,7 +57,7 @@ public class PhotosDetailActivity extends AppCompatActivity implements PullBackL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.translucentStatusBar(this);
+        StatusBarCompat.translucentStatusBar(this);//设置透明状态栏
         setContentView(R.layout.act_photo_detail);
         ButterKnife.bind(this);
         initView();
@@ -75,10 +75,11 @@ public class PhotosDetailActivity extends AppCompatActivity implements PullBackL
         initToolbar();
         initBackground();
         loadPhotoIv();
-        initImageView();
+        //initImageView();//重复，可以注释
         setPhotoViewClickEvent();
     }
 
+    //设置标题和返回键
     private void initToolbar() {
         toolbar.setTitle(getString(R.string.girl));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -101,6 +102,7 @@ public class PhotosDetailActivity extends AppCompatActivity implements PullBackL
                 .crossFade().into(photoTouchIv);
     }
 
+    //点击控制ToolBar和StatusBar的隐藏
     private void setPhotoViewClickEvent() {
         photoTouchIv.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
@@ -152,17 +154,20 @@ public class PhotosDetailActivity extends AppCompatActivity implements PullBackL
         hideOrShowToolbar();
     }
 
+    //按住照片向下拖拉，背景随着距离的增大变透明
     @Override
     public void onPull(float progress) {
         progress = Math.min(1f, progress * 3f);
         mBackground.setAlpha((int) (0xff/*255*/ * (1f - progress)));
     }
 
+    //下拉取消，Toolbar出现
     @Override
     public void onPullCancel() {
         toolBarFadeIn();
     }
 
+    //下拉完成，则finish
     @Override
     public void onPullComplete() {
         supportFinishAfterTransition();

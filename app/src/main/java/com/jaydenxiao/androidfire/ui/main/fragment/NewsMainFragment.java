@@ -54,13 +54,14 @@ public class NewsMainFragment extends BaseFragment<NewsMainPresenter, NewsMainMo
 
     @Override
     public void initPresenter() {
+        //把View，Presenter，Model绑定
         mPresenter.setVM(this, mModel);
     }
 
     @Override
     public void initView() {
         mPresenter.lodeMineChannelsRequest();
-        //点击按钮，返回至顶部
+        //点击按钮，返回至顶部，并发送返回至顶部事件
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,9 +92,9 @@ public class NewsMainFragment extends BaseFragment<NewsMainPresenter, NewsMainMo
                 fragmentAdapter.setFragments(getChildFragmentManager(), mNewsFragmentList, channelNames);
             }
             viewPager.setAdapter(fragmentAdapter);
-            tabs.setupWithViewPager(viewPager);
+            tabs.setupWithViewPager(viewPager);//Tab和viewPager绑定
             MyUtils.dynamicSetTabLayoutMode(tabs);
-            setPageChangeListener();
+            setPageChangeListener();//监听屏幕滑动切换
         }
     }
 
@@ -101,7 +102,6 @@ public class NewsMainFragment extends BaseFragment<NewsMainPresenter, NewsMainMo
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -110,7 +110,6 @@ public class NewsMainFragment extends BaseFragment<NewsMainPresenter, NewsMainMo
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }

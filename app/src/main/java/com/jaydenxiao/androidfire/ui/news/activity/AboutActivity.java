@@ -19,7 +19,7 @@ import butterknife.Bind;
 import static com.jaydenxiao.androidfire.R.layout.act_about;
 
 /**
- * des:关于
+ * des:关于界面
  * Created by xsf
  * on 2016.09.16:57
  */
@@ -65,7 +65,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        SetTranslanteBar();
+        SetTranslanteBar();//设置状态栏
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

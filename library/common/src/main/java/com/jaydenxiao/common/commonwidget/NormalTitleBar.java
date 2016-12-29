@@ -11,11 +11,11 @@ import android.widget.TextView;
 import com.jaydenxiao.common.R;
 import com.jaydenxiao.common.commonutils.DisplayUtil;
 
-
+//对标题栏的封装
 public class NormalTitleBar extends RelativeLayout {
 
     private ImageView ivRight;
-    private TextView ivBack,tvTitle, tvRight;
+    private TextView ivBack, tvTitle, tvRight;
     private RelativeLayout rlCommonTitle;
     private Context context;
 
@@ -37,8 +37,8 @@ public class NormalTitleBar extends RelativeLayout {
     }
 
     public void setHeaderHeight() {
-            rlCommonTitle.setPadding(0, DisplayUtil.getStatusBarHeight(context), 0, 0);
-            rlCommonTitle.requestLayout();
+        rlCommonTitle.setPadding(0, DisplayUtil.getStatusBarHeight(context), 0, 0);
+        rlCommonTitle.requestLayout();
     }
 
     /**
@@ -54,21 +54,23 @@ public class NormalTitleBar extends RelativeLayout {
 
     /**
      * 设置标题栏左侧字符串
+     *
      * @param visiable
      */
-    public void setTvLeftVisiable(boolean visiable){
-        if (visiable){
+    public void setTvLeftVisiable(boolean visiable) {
+        if (visiable) {
             ivBack.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ivBack.setVisibility(View.GONE);
         }
     }
 
     /**
      * 设置标题栏左侧字符串
+     *
      * @param tvLeftText
      */
-    public void setTvLeft(String tvLeftText){
+    public void setTvLeft(String tvLeftText) {
         ivBack.setText(tvLeftText);
     }
 
@@ -110,10 +112,11 @@ public class NormalTitleBar extends RelativeLayout {
 
     /**
      * 获取右按钮
+     *
      * @return
      */
     public View getRightImage() {
-       return ivRight;
+        return ivRight;
     }
 
     /**
@@ -122,8 +125,9 @@ public class NormalTitleBar extends RelativeLayout {
      * @param id
      */
     public void setLeftImagSrc(int id) {
-        ivBack.setCompoundDrawables(getResources().getDrawable(id),null,null,null);
+        ivBack.setCompoundDrawables(getResources().getDrawable(id), null, null, null);
     }
+
     /**
      * 左文字
      *
@@ -167,6 +171,7 @@ public class NormalTitleBar extends RelativeLayout {
     public void setBackGroundColor(int color) {
         rlCommonTitle.setBackgroundColor(color);
     }
+
     public Drawable getBackGroundDrawable() {
         return rlCommonTitle.getBackground();
     }

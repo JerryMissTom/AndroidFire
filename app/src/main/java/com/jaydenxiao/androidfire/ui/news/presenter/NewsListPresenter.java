@@ -11,7 +11,7 @@ import java.util.List;
 import rx.functions.Action1;
 
 /**
- * des:
+ * des:从NewsListModel获取新闻列表，然后更新NewsFrament中内容
  * Created by xsf
  * on 2016.09.14:53
  */
@@ -20,7 +20,7 @@ public class NewsListPresenter extends NewsListContract.Presenter {
     @Override
     public void onStart() {
         super.onStart();
-        //监听返回顶部动作
+        //监听返回顶部动作，从NewsMainFragment传过来
        mRxManage.on(AppConstant.NEWS_LIST_TO_TOP, new Action1<Object>() {
            @Override
            public void call(Object o) {

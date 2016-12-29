@@ -38,7 +38,7 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
 
     private String mNewsId;
     private String mNewsType;
-    private int mStartPage=0;
+    private int mStartPage = 0;
 
     // 标志位，标志已经初始化完成。
     private boolean isPrepared;
@@ -63,12 +63,12 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
         irc.setLayoutManager(new LinearLayoutManager(getContext()));
         datas.clear();
         newListAdapter = new NewListAdapter(getContext(), datas);
-        newListAdapter.openLoadAnimation(new ScaleInAnimation());
+        newListAdapter.openLoadAnimation(new ScaleInAnimation());//设置新item的载入动画
         irc.setAdapter(newListAdapter);
         irc.setOnRefreshListener(this);
         irc.setOnLoadMoreListener(this);
         //数据为空才重新发起请求
-        if(newListAdapter.getSize()<=0) {
+        if (newListAdapter.getSize() <= 0) {
             mStartPage = 0;
             mPresenter.getNewsListDataRequest(mNewsType, mNewsId, mStartPage);
         }
@@ -79,15 +79,15 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
     public void returnNewsListData(List<NewsSummary> newsSummaries) {
         if (newsSummaries != null) {
             mStartPage += 20;
-            if (newListAdapter.getPageBean().isRefresh()) {
+            if (newListAdapter.getPageBean().isRefresh()) { //下拉刷新，则清空原有的adapter内容，重新获取所有新闻，底部加载更多的话，则是把新加载的新闻加载原有的列表下面
                 irc.setRefreshing(false);
                 newListAdapter.replaceAll(newsSummaries);
             } else {
                 if (newsSummaries.size() > 0) {
-                    irc.setLoadMoreStatus(LoadMoreFooterView.Status.GONE);
+                    irc.setLoadMoreStatus(LoadMoreFooterView.Status.GONE);//底部显示更多新闻
                     newListAdapter.addAll(newsSummaries);
                 } else {
-                    irc.setLoadMoreStatus(LoadMoreFooterView.Status.THE_END);
+                    irc.setLoadMoreStatus(LoadMoreFooterView.Status.THE_END);//，没有新闻的话，显示END
                 }
             }
         }
@@ -101,6 +101,9 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
         irc.smoothScrollToPosition(0);
     }
 
+    /*
+     *下拉刷新，设置Refresh为true
+     */
     @Override
     public void onRefresh() {
         newListAdapter.getPageBean().setRefresh(true);
@@ -110,6 +113,9 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
         mPresenter.getNewsListDataRequest(mNewsType, mNewsId, mStartPage);
     }
 
+    /*
+     从底部加载更多，设置Refresh为false，与下拉刷新区分
+     */
     @Override
     public void onLoadMore(View loadMoreView) {
         newListAdapter.getPageBean().setRefresh(false);
@@ -120,7 +126,7 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
 
     @Override
     public void showLoading(String title) {
-        if( newListAdapter.getPageBean().isRefresh()) {
+        if (newListAdapter.getPageBean().isRefresh()) {
             loadedTip.setLoadingTip(LoadingTip.LoadStatus.loading);
         }
     }
@@ -132,11 +138,11 @@ public class NewsFrament extends BaseFragment<NewsListPresenter, NewsListModel> 
 
     @Override
     public void showErrorTip(String msg) {
-        if( newListAdapter.getPageBean().isRefresh()) {
+        if (newListAdapter.getPageBean().isRefresh()) {
             loadedTip.setLoadingTip(LoadingTip.LoadStatus.error);
             loadedTip.setTips(msg);
             irc.setRefreshing(false);
-        }else{
+        } else {
             irc.setLoadMoreStatus(LoadMoreFooterView.Status.ERROR);
         }
     }

@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+//实现拖曳的效果，可以参见http://blog.csdn.net/tyk0910/article/details/51460808
 public class ItemDragHelperCallback extends ItemTouchHelper.Callback {
     private OnItemMoveListener mOnItemMoveListener;
     private boolean mIsLongPressEnabled;
@@ -64,7 +65,6 @@ public class ItemDragHelperCallback extends ItemTouchHelper.Callback {
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         return !isDifferentItemViewType(viewHolder, target) &&
                 mOnItemMoveListener.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-
     }
 
     private boolean isDifferentItemViewType(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {

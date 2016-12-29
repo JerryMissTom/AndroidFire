@@ -34,7 +34,7 @@ import rx.functions.Action1;
  * Created by xsf
  * on 2016.09.11:51
  */
-public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsChannelModel>implements NewsChannelContract.View{
+public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsChannelModel> implements NewsChannelContract.View {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.news_channel_mine_rv)
@@ -52,9 +52,10 @@ public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsC
 
     /**
      * 入口
+     *
      * @param context
      */
-    public static void startAction(Context context){
+    public static void startAction(Context context) {
         Intent intent = new Intent(context, NewsChannelActivity.class);
         context.startActivity(intent);
     }
@@ -65,8 +66,8 @@ public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsC
         mRxManager.on(AppConstant.CHANNEL_SWAP, new Action1<ChannelItemMoveEvent>() {
             @Override
             public void call(ChannelItemMoveEvent channelItemMoveEvent) {
-                if (channelItemMoveEvent!=null) {
-                    mPresenter.onItemSwap((ArrayList<NewsChannelTable>) channelAdapterMine.getAll(),channelItemMoveEvent.getFromPosition(),channelItemMoveEvent.getToPosition());
+                if (channelItemMoveEvent != null) {
+                    mPresenter.onItemSwap((ArrayList<NewsChannelTable>) channelAdapterMine.getAll(), channelItemMoveEvent.getFromPosition(), channelItemMoveEvent.getToPosition());
                 }
             }
         });
@@ -74,7 +75,7 @@ public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsC
 
     @Override
     public void initPresenter() {
-            mPresenter.setVM(this, mModel);
+        mPresenter.setVM(this, mModel);
     }
 
     @Override
@@ -92,24 +93,25 @@ public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsC
         mPresenter.lodeChannelsRequest();
     }
 
+    //展示我的频道的数据
     @Override
     public void returnMineNewsChannels(List<NewsChannelTable> newsChannelsMine) {
-        channelAdapterMine = new ChannelAdapter(mContext,R.layout.item_news_channel);
+        channelAdapterMine = new ChannelAdapter(mContext, R.layout.item_news_channel);
         newsChannelMineRv.setLayoutManager(new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false));
         newsChannelMineRv.setItemAnimator(new DefaultItemAnimator());
         newsChannelMineRv.setAdapter(channelAdapterMine);
         channelAdapterMine.replaceAll(newsChannelsMine);
+        //点击从我的频道中移除，添加到更多频道
         channelAdapterMine.setOnItemClickListener(new ChannelAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 NewsChannelTable newsChannel = channelAdapterMine.get(position);
-                    channelAdapterMore.add(newsChannel);
-                    channelAdapterMine.removeAt(position);
-                    mPresenter.onItemAddOrRemove((ArrayList<NewsChannelTable>) channelAdapterMine.getAll(), (ArrayList<NewsChannelTable>)channelAdapterMore.getAll());
+                channelAdapterMore.add(newsChannel);
+                channelAdapterMine.removeAt(position);
+                mPresenter.onItemAddOrRemove((ArrayList<NewsChannelTable>) channelAdapterMine.getAll(), (ArrayList<NewsChannelTable>) channelAdapterMore.getAll());
 
             }
         });
-
 
         ItemDragHelperCallback itemDragHelperCallback = new ItemDragHelperCallback(channelAdapterMine);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragHelperCallback);
@@ -117,20 +119,22 @@ public class NewsChannelActivity extends BaseActivity<NewsChanelPresenter, NewsC
         channelAdapterMine.setItemDragHelperCallback(itemDragHelperCallback);
     }
 
+    //展示更多频道的数据
     @Override
     public void returnMoreNewsChannels(List<NewsChannelTable> newsChannelsMore) {
-        channelAdapterMore = new ChannelAdapter(mContext,R.layout.item_news_channel);
+        channelAdapterMore = new ChannelAdapter(mContext, R.layout.item_news_channel);
         newsChannelMoreRv.setLayoutManager(new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false));
         newsChannelMoreRv.setItemAnimator(new DefaultItemAnimator());
         newsChannelMoreRv.setAdapter(channelAdapterMore);
         channelAdapterMore.replaceAll(newsChannelsMore);
+        //点击更多频道中的Item，然后删除被点击的数据，添加至我的频道
         channelAdapterMore.setOnItemClickListener(new ChannelAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 NewsChannelTable newsChannel = channelAdapterMore.get(position);
-                    channelAdapterMine.add(newsChannel);
-                    channelAdapterMore.removeAt(position);
-                    mPresenter.onItemAddOrRemove((ArrayList<NewsChannelTable>) channelAdapterMine.getAll(), (ArrayList<NewsChannelTable>)channelAdapterMore.getAll());
+                channelAdapterMine.add(newsChannel);
+                channelAdapterMore.removeAt(position);
+                mPresenter.onItemAddOrRemove((ArrayList<NewsChannelTable>) channelAdapterMine.getAll(), (ArrayList<NewsChannelTable>) channelAdapterMore.getAll());
             }
         });
     }

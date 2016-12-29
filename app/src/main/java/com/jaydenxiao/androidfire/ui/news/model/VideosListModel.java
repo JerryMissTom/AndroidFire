@@ -15,7 +15,7 @@ import rx.functions.Func1;
 import rx.functions.Func2;
 
 /**
- * des:视频列表model
+ * des:视频列表model，获取数据后传到VideoListPresenter，然后在VideoFragment中展示
  * Created by xsf
  * on 2016.09.14:54
  */
@@ -23,7 +23,7 @@ public class VideosListModel implements VideosListContract.Model {
 
     @Override
     public Observable<List<VideoData>> getVideosListData(final String type, int startPage) {
-        return Api.getDefault(HostType.NETEASE_NEWS_VIDEO).getVideoList(Api.getCacheControl(),type,startPage)
+        return Api.getDefault(HostType.NETEASE_NEWS_VIDEO).getVideoList(Api.getCacheControl(), type, startPage)
                 .flatMap(new Func1<Map<String, List<VideoData>>, Observable<VideoData>>() {
                     @Override
                     public Observable<VideoData> call(Map<String, List<VideoData>> map) {

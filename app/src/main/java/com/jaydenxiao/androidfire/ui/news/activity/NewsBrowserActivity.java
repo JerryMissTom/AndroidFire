@@ -18,6 +18,9 @@ import com.jaydenxiao.common.base.BaseActivity;
 
 import butterknife.Bind;
 
+/*
+    使用WebView浏览新闻详情
+ */
 public class NewsBrowserActivity extends BaseActivity {
 
 
@@ -28,12 +31,13 @@ public class NewsBrowserActivity extends BaseActivity {
     @Bind(R.id.web_view)
     WebView webView;
 
-    public static void startAction(Context context ,String link,String title){
+    public static void startAction(Context context, String link, String title) {
         Intent intent = new Intent(context, NewsBrowserActivity.class);
-        intent.putExtra(AppConstant.NEWS_LINK,link);
-        intent.putExtra(AppConstant.NEWS_TITLE,title);
+        intent.putExtra(AppConstant.NEWS_LINK, link);
+        intent.putExtra(AppConstant.NEWS_TITLE, title);
         context.startActivity(intent);
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.act_news_browser;
@@ -43,6 +47,7 @@ public class NewsBrowserActivity extends BaseActivity {
     public void initPresenter() {
 
     }
+
     @Override
     public void initView() {
         initWebView();
@@ -93,7 +98,7 @@ public class NewsBrowserActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if(webView!=null) {
+        if (webView != null) {
             webView.removeAllViews();
             webView.destroy();
         }
