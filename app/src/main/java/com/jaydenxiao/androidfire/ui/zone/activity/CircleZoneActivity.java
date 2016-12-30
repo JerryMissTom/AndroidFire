@@ -124,7 +124,7 @@ public class CircleZoneActivity extends BaseActivity<CircleZonePresenter, ZoneMo
         menuRed.setClosedOnTouchOutside(true);
         //点赞效果初始化
         ntb.setTitleText(getString(R.string.circle_zone));
-        //滑动列表关闭输入框
+        //滑动列表关闭输入框，此输入框替代了recycleView中输入框的输入功能
         irc.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -423,6 +423,7 @@ public class CircleZoneActivity extends BaseActivity<CircleZonePresenter, ZoneMo
             menuRed.showMenuButton(true);
         }
     }
+
     /**
      * 测量偏移量
      *
@@ -477,6 +478,7 @@ public class CircleZoneActivity extends BaseActivity<CircleZonePresenter, ZoneMo
         }
 
     }
+
     @Override
     public void showLoading(String title) {
         loadedTip.setLoadingTip(LoadingTip.LoadStatus.loading);

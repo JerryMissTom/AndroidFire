@@ -10,7 +10,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
 /**
- * des:实现图像根据按下抬起动作变化颜色
+ * des:实现图像根据按下抬起动作变化颜色，按下变灰，抬起恢复原色
  * Created by xsf
  * on 2016.07.11:14
  */

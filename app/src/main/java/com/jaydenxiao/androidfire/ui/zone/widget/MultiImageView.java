@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * des:显示1~N张图片的View
+ * des:显示1~N张图片的View，设置图片按压的颜色，并监听点击事件，
  * Created by xsf
  * on 2016.07.11:11
  */

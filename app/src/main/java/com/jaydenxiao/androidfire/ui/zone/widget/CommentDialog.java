@@ -29,16 +29,16 @@ public class CommentDialog extends Dialog implements
     private Context mContext;
     private CircleZonePresenter mPresenter;
     private CommentItem mCommentItem;
-    private int mCirclePosition,commentPosition;
+    private int mCirclePosition, commentPosition;
 
-    public CommentDialog(Context context,CircleZonePresenter presenter,
-                         CommentItem commentItem, int circlePosition,int commentPosition) {
+    public CommentDialog(Context context, CircleZonePresenter presenter,
+                         CommentItem commentItem, int circlePosition, int commentPosition) {
         super(context, R.style.CustomProgressDialog);
         mContext = context;
         this.mPresenter = presenter;
         this.mCommentItem = commentItem;
         this.mCirclePosition = circlePosition;
-        this.commentPosition=commentPosition;
+        this.commentPosition = commentPosition;
         setCancelable(true);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_comment, null);
         setContentView(view);
@@ -46,6 +46,7 @@ public class CommentDialog extends Dialog implements
         initView();
     }
 
+    //放置在屏幕中央区域
     private void initWindowParams() {
         Window dialogWindow = getWindow();
         // 获取屏幕宽、高用
@@ -59,6 +60,7 @@ public class CommentDialog extends Dialog implements
         dialogWindow.setAttributes(lp);
     }
 
+    //自己的屏幕长按可以删除，别人的评论只可以复制
     private void initView() {
         TextView copyTv = (TextView) findViewById(R.id.copyTv);
         copyTv.setOnClickListener(this);
@@ -76,16 +78,16 @@ public class CommentDialog extends Dialog implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.copyTv:
+            case R.id.copyTv://复制到剪切板
                 if (mCommentItem != null) {
                     ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                     clipboard.setText(mCommentItem.getContent());
                 }
                 dismiss();
                 break;
-            case R.id.deleteTv:
+            case R.id.deleteTv://删除屏幕，提交到后台
                 if (mPresenter != null && mCommentItem != null) {
-                    mPresenter.deleteComment(mCirclePosition, FormatUtil.checkValue(mCommentItem.getId()),commentPosition);
+                    mPresenter.deleteComment(mCirclePosition, FormatUtil.checkValue(mCommentItem.getId()), commentPosition);
                 }
                 dismiss();
                 break;

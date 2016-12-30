@@ -92,13 +92,14 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
     public CommentAdapter commentAdapter;
 
     public static ZoneViewHolder create(Context context, int type) {
-        ZoneViewHolder imageViewHolder = new ZoneViewHolder(LayoutInflater.from(context).inflate(R.layout.item_circle_list, null), context,type );
+        ZoneViewHolder imageViewHolder = new ZoneViewHolder(LayoutInflater.from(context).inflate(R.layout.item_circle_list, null), context, type);
         return imageViewHolder;
     }
+
     public ZoneViewHolder(View itemView, final Context context, int type) {
         super(itemView);
-        this.itemView=itemView;
-        this.type=type;
+        this.itemView = itemView;
+        this.type = type;
         this.mContext = context;
         initView();
     }
@@ -114,9 +115,9 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
                 linkOrImgViewStub.inflate();
                 LinearLayout urlBodyView = (LinearLayout) itemView.findViewById(R.id.urlBody);
                 if (urlBodyView != null) {
-                   urlBody = urlBodyView;
-                   urlImageIv = (ImageView) itemView.findViewById(R.id.urlImageIv);
-                   urlContentTv = (TextView) itemView.findViewById(R.id.urlContentTv);
+                    urlBody = urlBodyView;
+                    urlImageIv = (ImageView) itemView.findViewById(R.id.urlImageIv);
+                    urlContentTv = (TextView) itemView.findViewById(R.id.urlContentTv);
                 }
                 break;
             case CircleAdapter.ITEM_VIEW_TYPE_IMAGE:// 图文view
@@ -156,16 +157,17 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * 设置数据
+     *
      * @param circleItem2
      * @param position2
      */
-    public void setData(CircleZonePresenter mPresenter2, CircleItem circleItem2, final int position2){
-        if(mPresenter2==null||circleItem2==null){
+    public void setData(CircleZonePresenter mPresenter2, CircleItem circleItem2, final int position2) {
+        if (mPresenter2 == null || circleItem2 == null) {
             return;
         }
-        this.circleItem=circleItem2;
-        this.mPresenter=mPresenter2;
-        this.position=position2;
+        this.circleItem = circleItem2;
+        this.mPresenter = mPresenter2;
+        this.position = position2;
         final List<FavortItem> favortDatas = circleItem.getGoodjobs();
         final List<CommentItem> commentsDatas = circleItem.getReplys();
         boolean hasFavort = circleItem.getGoodjobs().size() > 0 ? true : false;
@@ -179,7 +181,7 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
         tvAddressOrDistance.setText("广州 <7KM");
         contentTv.setVisibility(TextUtils.isEmpty(circleItem.getContent()) ? View.GONE : View.VISIBLE);
         //是否显示删除图标
-        deleteBtn.setVisibility(AppCache.getInstance().getUserId().equals(circleItem.getUserId())?View.VISIBLE:View.GONE);
+        deleteBtn.setVisibility(AppCache.getInstance().getUserId().equals(circleItem.getUserId()) ? View.VISIBLE : View.GONE);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,10 +247,10 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onItemClick(int commentPosition) {
                         CommentItem commentItem = commentsDatas.get(commentPosition);
-                        if (AppCache.getInstance().getUserId().equals(commentItem.getUserId())) {//复制或者删除自己的评论
-                            CommentDialog dialog = new CommentDialog(mContext, mPresenter, commentItem, position,commentPosition);
+                        if (AppCache.getInstance().getUserId().equals(commentItem.getUserId())) {//点击自己的评论，可以复制或者删除
+                            CommentDialog dialog = new CommentDialog(mContext, mPresenter, commentItem, position, commentPosition);
                             dialog.show();
-                        } else {//回复别人的评论
+                        } else {//点击别人的评论，回复
                             if (mPresenter != null) {
                                 CommentConfig config = new CommentConfig();
                                 config.circlePosition = position;
@@ -258,18 +260,18 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
                                 config.setPublishUserId(circleItem.getUserId());//动态人userid
                                 config.setId(commentItem.getUserId());//评论人userid
                                 config.setName(commentItem.getUserNickname());//评论人nickname
-                                mPresenter.showEditTextBody(config);
+                                mPresenter.showEditTextBody(config);//显示输入框，通过CircleZonePresenter，在CircleZoneActivity中处理
                             }
                         }
                     }
                 });
-                //长按评论
+                //长按评论，根据是否是自己的，提供复制和删除的功能
                 commentList.setOnItemLongClick(new CommentListView.OnItemLongClickListener() {
                     @Override
                     public void onItemLongClick(int commentPosition) {
                         //长按进行复制或者删除
                         CommentItem commentItem = commentsDatas.get(commentPosition);
-                        CommentDialog dialog = new CommentDialog(mContext, mPresenter, commentItem, position,commentPosition);
+                        CommentDialog dialog = new CommentDialog(mContext, mPresenter, commentItem, position, commentPosition);
                         dialog.show();
                     }
                 });
@@ -319,7 +321,7 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 //跳到个人朋友圈
-                ToastUitl.showShort("头像点击了"+position);
+                ToastUitl.showShort("头像点击了" + position);
             }
         });
         urlTipTv.setVisibility(View.GONE);
@@ -330,6 +332,7 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
      * //点赞、取消点赞
      */
     private long mLasttime = 0;
+
     private void favort(String publishId, String publishUserId, int circlePosition, String mTitle, View view) {
         if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
             return;
@@ -342,6 +345,7 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
             }
         }
     }
+
     /**
      * 评论
      */
@@ -355,18 +359,21 @@ public class ZoneViewHolder extends RecyclerView.ViewHolder {
             mPresenter.showEditTextBody(config);
         }
     }
-    public View getRootView(){
+
+    public View getRootView() {
         return itemView.findViewById(R.id.ll_root);
     }
-    public View getCommentListView(){
-            return commentList;
+
+    public View getCommentListView() {
+        return commentList;
     }
-    public int getHeight(){
-        if(itemView!=null){
-        return itemView.getMeasuredHeight();
-            }
-            else{
-            return 0;}
+
+    public int getHeight() {
+        if (itemView != null) {
+            return itemView.getMeasuredHeight();
+        } else {
+            return 0;
         }
+    }
 
 }
